@@ -1,0 +1,84 @@
+import { SITE } from "./config";
+
+/**
+ * The model cannot be trusted to copy a 44 character base58 string without
+ * slipping a character. A wrong contract address on a memecoin site sends
+ * people's money somewhere it can never come back from, so the real address
+ * is stitched in server-side and anything address-shaped that came close to
+ * it is overwritten.
+ */
+
+const CA = SITE.contract;
+
+/**
+ * base58: no 0, O, I or l. A real address is 32-44 characters, but the run is
+ * matched well past that on purpose: a hallucination with an inserted
+ * character is 45 long, and matching only the first 44 would "repair" it into
+ * the correct address followed by the leftover character — still wrong, and
+ * far more convincing.
+ */
+const B58_RUN = /[1-9A-HJ-NP-Za-km-z]{32,64}/g;
+const B58_CHAR = /[1-9A-HJ-NP-Za-km-z]/;
+const PLACEHOLDER = /\{\{\s*CA\s*\}\}/gi;
+
+/** Hold back enough tail that a full address can never straddle a flush. */
+const HOLD = 96;
+
+/** A hallucinated address is a near-copy; an unrelated mint is ~40 edits away. */
+const MAX_EDITS = 10;
+
+function editDistance(a: string, b: string): number {
+  const n = b.length;
+  let prev = Array.from({ length: n + 1 }, (_, j) => j);
+
+  for (let i = 1; i <= a.length; i++) {
+    const cur = new Array<number>(n + 1);
+    cur[0] = i;
+    for (let j = 1; j <= n; j++) {
+      cur[j] = Math.min(
+        prev[j] + 1,
+        cur[j - 1] + 1,
+        prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)
+      );
+    }
+    prev = cur;
+  }
+  return prev[n];
+}
+
+/** Replace the {{CA}} placeholder and repair near-miss contract addresses. */
+export function fixContract(text: string): string {
+  return text.replace(PLACEHOLDER, CA).replace(B58_RUN, (match) => {
+    if (match === CA) return match;
+    return editDistance(match, CA) <= MAX_EDITS ? CA : match;
+  });
+}
+
+/**
+ * Streaming wrapper: emits text as it arrives but never cuts inside a
+ * base58 run, so an address is always rewritten as a whole.
+ */
+export function createContractGuard() {
+  let buffer = "";
+
+  return {
+    push(chunk: string): string {
+      buffer += chunk;
+      if (buffer.length <= HOLD) return "";
+
+      let cut = buffer.length - HOLD;
+      while (cut > 0 && B58_CHAR.test(buffer[cut])) cut--;
+      if (cut <= 0) return "";
+
+      const head = buffer.slice(0, cut);
+      buffer = buffer.slice(cut);
+      return fixContract(head);
+    },
+
+    flush(): string {
+      const out = fixContract(buffer);
+      buffer = "";
+      return out;
+    },
+  };
+}

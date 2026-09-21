@@ -1,5 +1,6 @@
 import { fal } from "@fal-ai/client";
 import { SYSTEM_PROMPT, offlineReply } from "@/lib/persona";
+import { createContractGuard } from "@/lib/sanitize";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -78,6 +79,11 @@ export async function POST(req: Request) {
   const stream = new ReadableStream<Uint8Array>({
     async start(controller) {
       let sent = "";
+      const guard = createContractGuard();
+      const emit = (text: string) => {
+        const safe = guard.push(text);
+        if (safe) controller.enqueue(encoder.encode(safe));
+      };
       try {
         const events = await fal.stream("fal-ai/any-llm", {
           input: {
@@ -95,10 +101,10 @@ export async function POST(req: Request) {
           // fal streams cumulative output — emit only the new tail.
           if (output.startsWith(sent)) {
             const delta = output.slice(sent.length);
-            if (delta) controller.enqueue(encoder.encode(delta));
+            if (delta) emit(delta);
             sent = output;
           } else {
-            controller.enqueue(encoder.encode(output));
+            emit(output);
             sent += output;
           }
         }
@@ -111,13 +117,14 @@ export async function POST(req: Request) {
         const final = result?.output ?? result?.data?.output;
         if (typeof final === "string" && final.startsWith(sent)) {
           const delta = final.slice(sent.length);
-          if (delta) controller.enqueue(encoder.encode(delta));
+          if (delta) {
+            emit(delta);
+            sent = final;
+          }
         }
 
         if (!sent.trim()) {
-          controller.enqueue(
-            encoder.encode(offlineReply(lastUser.content))
-          );
+          emit(offlineReply(lastUser.content));
         }
       } catch (err) {
         console.error("[openinu] fal.ai error:", err);
@@ -129,6 +136,9 @@ export async function POST(req: Request) {
           );
         }
       } finally {
+        // The guard holds back a tail — without this the answer is truncated.
+        const tail = guard.flush();
+        if (tail) controller.enqueue(encoder.encode(tail));
         controller.close();
       }
     },
