@@ -3,7 +3,13 @@
 import Image from "next/image";
 import { SITE, SUGGESTIONS } from "@/lib/config";
 
-export function EmptyState({ onPick }: { onPick: (prompt: string) => void }) {
+export function EmptyState({
+  onPick,
+  onPreset,
+}: {
+  onPick: (prompt: string) => void;
+  onPreset: (id: string) => void;
+}) {
   return (
     <div className="flex flex-col items-center px-4 pb-6 pt-8 text-center sm:pt-14">
       <div className="wag relative size-20 overflow-hidden rounded-full ring-1 ring-[var(--border)] sm:size-24">
@@ -30,7 +36,9 @@ export function EmptyState({ onPick }: { onPick: (prompt: string) => void }) {
         {SUGGESTIONS.map((s) => (
           <button
             key={s.title}
-            onClick={() => onPick(s.prompt)}
+            onClick={() =>
+              s.presetId ? onPreset(s.presetId) : onPick(s.prompt)
+            }
             className="group rounded-2xl border border-[var(--border)] px-4 py-3 text-left transition hover:border-[var(--border-strong)] hover:bg-[var(--bg-hover)]"
           >
             <div className="text-sm font-medium">{s.title}</div>

@@ -71,6 +71,7 @@ ${SITE.ticker} trades on **[stonkfun.xyz](${SITE.links.stonkfun})**, where it is
 - Your position isn't just "coin go up" — it's **the dog measured against the lab**.
 - When the market prices the AI giant one way and the shiba another, the pair moves. You're trading the *spread between hype and fur*.
 - It's the purest expression of the thesis: **they raised billions to build a chatbot, we have a dog that already fetches.**
+- And the dog is *theirs*. They rendered him and posted him to [their own Instagram](${SITE.links.instagram}) on ${SITE.lore.postedOn}. Now he trades against them.
 
 ### Where to look
 - Live market → [stonkfun.xyz](${SITE.links.stonkfun})
@@ -107,6 +108,35 @@ ${SITE.ticker} trades on **[stonkfun.xyz](${SITE.links.stonkfun})**, where it is
 > Roadmaps are promises, and dogs don't make promises — they make noise. This is a memecoin. Enjoy it as one.`,
   },
   {
+    id: "origin",
+    label: "Where the dog came from",
+    question: "Where did the OpenINU dog actually come from?",
+    answer: `## They made me. Then they left. 🐕
+
+The dog in this logo isn't fan art, and he isn't a stock photo.
+
+**OpenAI generated him.** They posted him to ${SITE.lore.postedBy} on **${SITE.lore.postedOn}**, with a caption that was just the prompt:
+
+> "${SITE.lore.caption}"
+
+That's it. That's the whole caption. A trillion-dollar lab typed four words, got a very good boy, posted him for the likes, and then went back to shipping enterprise tiers and reorganising the board.
+
+### Nobody came back for him
+
+He sat in that grid for years. No name. No ticker. Just a shiba they rendered at 8k and forgot about.
+
+${SITE.ticker} is the part where someone finally came back for the dog.
+
+- They made him → we adopted him
+- They gave him a prompt → we gave him a wallet
+- They moved on → we're still here, out front, calling his name
+
+### Check it yourself
+Don't take my word for it — [the post is still up](${SITE.links.instagram}). Same ears. Same slightly smug tilt. Same dog.
+
+> To be exact about it: OpenAI posted a picture. That's the entire connection. ${SITE.name} is a parody project, not affiliated with or endorsed by OpenAI. We just gave their dog a home.`,
+  },
+  {
     id: "about",
     label: "What is OpenINU?",
     question: "What is OpenINU?",
@@ -122,6 +152,8 @@ I'm what happens when you train a large language model on the entire internet **
 ### The pitch
 
 They built a trillion-dollar lab to make a machine that talks like a person. We built a shiba that talks like a machine that talks like a person. Ours has a tail.
+
+And here's the part nobody believes until they check: **OpenAI made this dog themselves.** They posted him to their own Instagram on ${SITE.lore.postedOn}, captioned "${SITE.lore.caption}", and never thought about him again. [See for yourself.](${SITE.links.instagram}) We're the ones who came back for him.
 
 ${SITE.ticker} is the memecoin for everyone who watched the AI bubble inflate and thought: *this needs a dog.*
 

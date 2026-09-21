@@ -4,6 +4,8 @@
 
 A ChatGPT-style web app for **$OPENINU**, a Shiba Inu themed memecoin on **Solana**, paired to **OpenAI stock** on [stonkfun.xyz](https://www.stonkfun.xyz/token/CpcgnprGb6jMV5SY8oRuyALRByr9rNkYsdw8AVMCvdoN).
 
+The dog is not fan art. OpenAI generated him and posted him to their own Instagram on **3 October 2022**, captioned *"shiba inu portrait, 8k, rendering"* — [the post is still up](https://www.instagram.com/p/CjQeCdTL51i/). They made him, posted him, and moved on. $OPENINU is the part where someone came back for him.
+
 **Contract address (Solana)**
 
 ```

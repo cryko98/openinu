@@ -110,6 +110,15 @@ export const XIcon = (p: P) => (
   </svg>
 );
 
+export const PortraitIcon = (p: P) => (
+  <svg {...base} {...p}>
+    <rect x="3" y="3" width="18" height="18" rx="2.5" />
+    <circle cx="9" cy="9.5" r="1.8" />
+    <path d="m3.5 17 4.2-4.2a2 2 0 0 1 2.8 0L15 17" />
+    <path d="m14 14.5 1.8-1.8a2 2 0 0 1 2.8 0l1.9 1.9" />
+  </svg>
+);
+
 export const InstagramIcon = (p: P) => (
   <svg {...base} {...p}>
     <rect x="3" y="3" width="18" height="18" rx="5" />

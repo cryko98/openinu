@@ -13,6 +13,7 @@ import {
   MapIcon,
   NewChatIcon,
   PawIcon,
+  PortraitIcon,
   SearchIcon,
   SidebarIcon,
   XIcon,
@@ -25,6 +26,7 @@ const PRESET_ICONS: Record<string, (p: React.SVGProps<SVGSVGElement>) => React.R
   tokenomics: ChartIcon,
   pairing: BookIcon,
   roadmap: MapIcon,
+  origin: PortraitIcon,
   about: PawIcon,
 };
 
