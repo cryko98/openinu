@@ -90,16 +90,18 @@ export function TopBar({
         </>
       )}
 
-      <div className="relative" ref={ref}>
+      <div className="relative min-w-0" ref={ref}>
         <button
           onClick={() => setMenu((v) => !v)}
-          className="flex items-center gap-1 rounded-xl px-2.5 py-1.5 text-[17px] font-medium transition hover:bg-[var(--bg-hover)]"
+          className="flex min-w-0 items-center gap-1 rounded-xl px-2.5 py-1.5 text-[17px] font-medium transition hover:bg-[var(--bg-hover)]"
         >
-          <span className="text-[var(--text)]">{model.name.split("-")[0]}</span>
-          <span className="text-[var(--text-muted)]">
+          <span className="truncate text-[var(--text)]">
+            {model.name.split("-")[0]}
+          </span>
+          <span className="truncate text-[var(--text-muted)]">
             {model.name.includes("-") ? model.name.slice(model.name.indexOf("-") + 1) : ""}
           </span>
-          <ChevronIcon className="size-4 text-[var(--text-muted)]" />
+          <ChevronIcon className="size-4 shrink-0 text-[var(--text-muted)]" />
         </button>
 
         {menu && (
@@ -147,10 +149,9 @@ export function TopBar({
           href={SITE.links.stonkfun}
           target="_blank"
           rel="noopener noreferrer"
-          className="rounded-full bg-[var(--accent)] px-3.5 py-1.5 text-sm font-semibold text-white transition hover:opacity-90 sm:px-4"
+          className="shrink-0 whitespace-nowrap rounded-full bg-[var(--accent)] px-3.5 py-1.5 text-sm font-semibold text-white transition hover:opacity-90 sm:px-4"
         >
-          Buy <span className="hidden sm:inline">{SITE.ticker}</span>
-          <span className="sm:hidden">$INU</span>
+          Buy {SITE.ticker}
         </a>
       </div>
     </header>

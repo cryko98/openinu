@@ -14,8 +14,8 @@ export const SITE = {
       "https://dexscreener.com/solana/CpcgnprGb6jMV5SY8oRuyALRByr9rNkYsdw8AVMCvdoN",
     solscan:
       "https://solscan.io/token/CpcgnprGb6jMV5SY8oRuyALRByr9rNkYsdw8AVMCvdoN",
-    twitter: "https://x.com/search?q=%24OPENINU",
-    telegram: "https://t.me/",
+    twitter: "https://x.com/openinu_",
+    instagram: "https://www.instagram.com/p/CjQeCdTL51i/",
   },
   modelLabel: "OpenINU-4o",
 } as const;

@@ -9,12 +9,12 @@ import {
   ChartIcon,
   CoinIcon,
   ExternalIcon,
+  InstagramIcon,
   MapIcon,
   NewChatIcon,
   PawIcon,
   SearchIcon,
   SidebarIcon,
-  TelegramIcon,
   XIcon,
 } from "./Icons";
 
@@ -186,7 +186,7 @@ export function Sidebar({
               { href: SITE.links.dexscreener, label: "Chart", Icon: ChartIcon },
               { href: SITE.links.solscan, label: "Solscan", Icon: BookIcon },
               { href: SITE.links.twitter, label: "X", Icon: XIcon },
-              { href: SITE.links.telegram, label: "Telegram", Icon: TelegramIcon },
+              { href: SITE.links.instagram, label: "Instagram", Icon: InstagramIcon },
             ].map(({ href, label, Icon }) => (
               <a
                 key={label}
