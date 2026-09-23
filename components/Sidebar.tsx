@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useMemo, useState } from "react";
-import { SITE } from "@/lib/config";
+import { COMING_SOON, SITE } from "@/lib/config";
 import { PRESETS } from "@/lib/presets";
 import {
   BookIcon,
@@ -170,18 +170,34 @@ export function Sidebar({
         </nav>
 
         <div className="border-t border-[var(--border)] p-2.5">
-          <a
-            href={SITE.links.stonkfun}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2.5 rounded-xl px-2 py-2 text-sm transition hover:bg-[var(--bg-hover)]"
-          >
-            <span className="grid size-6 shrink-0 place-items-center rounded-full bg-[var(--accent-soft)] text-[var(--accent)]">
-              <CoinIcon className="size-3.5" />
-            </span>
-            <span className="flex-1 truncate font-medium">Buy {SITE.ticker}</span>
-            <ExternalIcon className="size-3.5 text-[var(--text-faint)]" />
-          </a>
+          {SITE.links.stonkfun ? (
+            <a
+              href={SITE.links.stonkfun}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2.5 rounded-xl px-2 py-2 text-sm transition hover:bg-[var(--bg-hover)]"
+            >
+              <span className="grid size-6 shrink-0 place-items-center rounded-full bg-[var(--accent-soft)] text-[var(--accent)]">
+                <CoinIcon className="size-3.5" />
+              </span>
+              <span className="flex-1 truncate font-medium">Buy {SITE.ticker}</span>
+              <ExternalIcon className="size-3.5 text-[var(--text-faint)]" />
+            </a>
+          ) : (
+            <div className="flex items-center gap-2.5 rounded-xl px-2 py-2 text-sm">
+              <span className="grid size-6 shrink-0 place-items-center rounded-full bg-[var(--accent-soft)] text-[var(--accent)]">
+                <CoinIcon className="size-3.5" />
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block truncate font-medium">
+                  {SITE.ticker} · {COMING_SOON}
+                </span>
+                <span className="block truncate text-[11px] text-[var(--text-faint)]">
+                  No CA yet — ignore anyone who has one
+                </span>
+              </span>
+            </div>
+          )}
 
           <div className="mt-1 flex items-center gap-1 px-1">
             {[
@@ -189,19 +205,23 @@ export function Sidebar({
               { href: SITE.links.solscan, label: "Solscan", Icon: BookIcon },
               { href: SITE.links.twitter, label: "X", Icon: XIcon },
               { href: SITE.links.instagram, label: "Instagram", Icon: InstagramIcon },
-            ].map(({ href, label, Icon }) => (
-              <a
-                key={label}
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={label}
-                title={label}
-                className="grid size-8 place-items-center rounded-lg text-[var(--text-muted)] transition hover:bg-[var(--bg-hover)] hover:text-[var(--text)]"
-              >
-                <Icon className="size-4" />
-              </a>
-            ))}
+            ]
+              .filter((l): l is { href: string; label: string; Icon: typeof ChartIcon } =>
+                l.href !== null
+              )
+              .map(({ href, label, Icon }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  title={label}
+                  className="grid size-8 place-items-center rounded-lg text-[var(--text-muted)] transition hover:bg-[var(--bg-hover)] hover:text-[var(--text)]"
+                >
+                  <Icon className="size-4" />
+                </a>
+              ))}
           </div>
         </div>
       </aside>

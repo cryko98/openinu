@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { SITE } from "@/lib/config";
+import { COMING_SOON, SITE } from "@/lib/config";
 import {
   ChevronIcon,
   MoonIcon,
@@ -145,14 +145,23 @@ export function TopBar({
           {light ? <MoonIcon className="size-5" /> : <SunIcon className="size-5" />}
         </button>
 
-        <a
-          href={SITE.links.stonkfun}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="shrink-0 whitespace-nowrap rounded-full bg-[var(--accent)] px-3.5 py-1.5 text-sm font-semibold text-white transition hover:opacity-90 sm:px-4"
-        >
-          Buy {SITE.ticker}
-        </a>
+        {SITE.links.stonkfun ? (
+          <a
+            href={SITE.links.stonkfun}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="shrink-0 whitespace-nowrap rounded-full bg-[var(--accent)] px-3.5 py-1.5 text-sm font-semibold text-white transition hover:opacity-90 sm:px-4"
+          >
+            Buy {SITE.ticker}
+          </a>
+        ) : (
+          <span
+            title={`${SITE.ticker} has not launched yet`}
+            className="shrink-0 whitespace-nowrap rounded-full border border-dashed border-[var(--accent)] px-3.5 py-1.5 text-sm font-semibold text-[var(--accent)] sm:px-4"
+          >
+            {SITE.ticker} · {COMING_SOON}
+          </span>
+        )}
       </div>
     </header>
   );

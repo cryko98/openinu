@@ -1,4 +1,4 @@
-import { SITE } from "./config";
+import { IS_LAUNCHED, SITE } from "./config";
 
 export type Preset = {
   id: string;
@@ -7,13 +7,28 @@ export type Preset = {
   answer: string;
 };
 
-/** Instant, hand-written answers — no model call, no hallucinated numbers. */
-export const PRESETS: Preset[] = [
-  {
-    id: "buy",
-    label: "How to buy",
-    question: "How do I buy $OPENINU?",
-    answer: `## Fetching you into the pack 🐾
+/** Before launch, every buying question becomes a scam warning instead. */
+const PRE_LAUNCH_BUY = `## Not yet, friend 🐾
+
+**${SITE.ticker} hasn't launched.** There is no contract address, no market, no chart, and nothing to buy.
+
+### So if you see a CA right now
+
+Someone is trying to take your money. Every single time, no exceptions:
+
+- There is **no presale**, no whitelist, no private allocation, no early round.
+- Nobody is DMing the contract address early. Not the team, not a "mod", not a friendly stranger in the replies.
+- Any "${SITE.name}" token trading today is **not this one**.
+
+### What actually happens at launch
+
+The address gets posted on [X](${SITE.links.twitter}) and appears on this page at the same moment. That is the only place it comes from. Check it against both before you spend anything.
+
+> Bookmark this page. Check the X account. Believe nothing else.
+
+*He waited three years in an Instagram grid. A few more days won't hurt him.*`;
+
+const LAUNCHED_BUY = `## Fetching you into the pack 🐾
 
 **Contract address (Solana)**
 \`\`\`
@@ -32,7 +47,17 @@ ${SITE.contract}
 - Always verify the CA. Impostors exist. There is exactly one: \`${SITE.contract}\`
 - Check the live chart on [DexScreener](${SITE.links.dexscreener}) and the mint on [Solscan](${SITE.links.solscan}).
 
-> ${SITE.ticker} is a memecoin and a parody. Not financial advice, not affiliated with OpenAI. Only bring what you can afford to lose.`,
+> ${SITE.ticker} is a memecoin and a parody. Not financial advice, not affiliated with OpenAI. Only bring what you can afford to lose.`;
+
+/** Instant, hand-written answers — no model call, no hallucinated numbers. */
+export const PRESETS: Preset[] = [
+  {
+    id: "buy",
+    label: IS_LAUNCHED ? "How to buy" : "When can I buy?",
+    question: IS_LAUNCHED
+      ? "How do I buy $OPENINU?"
+      : "When can I buy $OPENINU?",
+    answer: IS_LAUNCHED ? LAUNCHED_BUY : PRE_LAUNCH_BUY,
   },
   {
     id: "tokenomics",
@@ -44,19 +69,26 @@ ${SITE.contract}
 |---|---|
 | **Ticker** | ${SITE.ticker} |
 | **Chain** | Solana |
-| **Contract** | \`${SITE.contract}\` |
-| **Venue** | [stonkfun.xyz](${SITE.links.stonkfun}) |
+| **Contract** | ${IS_LAUNCHED ? `\`${SITE.contract}\`` : "**Coming soon**"} |
+| **Venue** | ${IS_LAUNCHED ? `[stonkfun.xyz](${SITE.links.stonkfun})` : "stonkfun.xyz — at launch"} |
 | **Paired against** | OpenAI stock |
 
 ### The honest version
 
 There is no 47-page safety paper here. No presale deck, no board coup, no "capped-profit subsidiary". Just a dog, a chart, and a contract that anyone can read.
 
-- **Supply and holders:** verify them yourself on [Solscan](${SITE.links.solscan}) — live numbers beat my promises.
+${
+  IS_LAUNCHED
+    ? `- **Supply and holders:** verify them yourself on [Solscan](${SITE.links.solscan}) — live numbers beat my promises.
 - **Liquidity and price:** live on [stonkfun](${SITE.links.stonkfun}) and [DexScreener](${SITE.links.dexscreener}).
 - **Utility:** I talk to you. That's it. That's the utility. Everything else is a chart.
 
-**Don't trust, verify.** Every number that matters is on-chain, and the chain never sleeps — much like a shiba at 3am hearing a leaf.`,
+**Don't trust, verify.** Every number that matters is on-chain, and the chain never sleeps — much like a shiba at 3am hearing a leaf.`
+    : `- **Supply, liquidity, holders:** nothing exists on-chain yet, so there is nothing for me to quote and nothing for you to verify. I'd rather say that than invent a number.
+- **Utility:** I talk to you. That's it. That's the utility. Everything else will be a chart.
+
+**Don't trust, verify** — and right now there is nothing to verify, which is exactly why you should ignore anyone claiming otherwise.`
+}`,
   },
   {
     id: "pairing",
@@ -64,7 +96,11 @@ There is no 47-page safety paper here. No presale deck, no board coup, no "cappe
     question: "How is $OPENINU paired to OpenAI stock?",
     answer: `## Dog vs. Lab 🐕 vs 🤖
 
-${SITE.ticker} trades on **[stonkfun.xyz](${SITE.links.stonkfun})**, where it is **paired to OpenAI stock** instead of the usual boring SOL pair.
+${
+  IS_LAUNCHED
+    ? `${SITE.ticker} trades on **[stonkfun.xyz](${SITE.links.stonkfun})**, where it is **paired to OpenAI stock** instead of the usual boring SOL pair.`
+    : `At launch, ${SITE.ticker} will trade on **stonkfun.xyz** — **paired to OpenAI stock** instead of the usual boring SOL pair.`
+}
 
 ### What that actually means
 
@@ -74,8 +110,12 @@ ${SITE.ticker} trades on **[stonkfun.xyz](${SITE.links.stonkfun})**, where it is
 - And the dog is *theirs*. They rendered him and posted him to [their own Instagram](${SITE.links.instagram}) on ${SITE.lore.postedOn}. Now he trades against them.
 
 ### Where to look
-- Live market → [stonkfun.xyz](${SITE.links.stonkfun})
-- Chart and liquidity → [DexScreener](${SITE.links.dexscreener})
+${
+  IS_LAUNCHED
+    ? `- Live market → [stonkfun.xyz](${SITE.links.stonkfun})
+- Chart and liquidity → [DexScreener](${SITE.links.dexscreener})`
+    : `- Nowhere yet — there's no market until launch. The address and the link land on [X](${SITE.links.twitter}) and on this page at the same time.`
+}
 
 > Parody project. ${SITE.name} is not affiliated with, endorsed by, or connected to OpenAI in any way. We just like the ratio.`,
   },
@@ -86,10 +126,17 @@ ${SITE.ticker} trades on **[stonkfun.xyz](${SITE.links.stonkfun})**, where it is
     answer: `## Roadmap 🦴
 
 ### Phase 1 — *Sit*
-- Mint on Solana ✅
-- Pair against OpenAI stock on stonkfun ✅
 - Ship this chat interface ✅
-- First 1,000 humans in the pack
+- Adopt the dog OpenAI left behind ✅
+${
+  IS_LAUNCHED
+    ? `- Mint on Solana ✅
+- Pair against OpenAI stock on stonkfun ✅
+- First 1,000 humans in the pack`
+    : `- Mint on Solana — **next**
+- Pair against OpenAI stock on stonkfun — **next**
+- First 1,000 humans in the pack`
+}
 
 ### Phase 2 — *Stay*
 - Community memes, raids, and an unreasonable amount of shiba fan art
@@ -146,8 +193,13 @@ I'm what happens when you train a large language model on the entire internet **
 
 - **Ticker:** ${SITE.ticker}
 - **Chain:** Solana
-- **CA:** \`${SITE.contract}\`
-- **Paired to OpenAI stock** on [stonkfun.xyz](${SITE.links.stonkfun})
+${
+  IS_LAUNCHED
+    ? `- **CA:** \`${SITE.contract}\`
+- **Paired to OpenAI stock** on [stonkfun.xyz](${SITE.links.stonkfun})`
+    : `- **CA:** not launched yet — **coming soon**
+- **Paired to OpenAI stock** on stonkfun.xyz, at launch`
+}
 
 ### The pitch
 

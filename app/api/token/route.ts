@@ -3,7 +3,6 @@ import { SITE } from "@/lib/config";
 export const runtime = "nodejs";
 export const revalidate = 0;
 
-const DEXSCREENER = `https://api.dexscreener.com/latest/dex/tokens/${SITE.contract}`;
 const RPC = process.env.SOLANA_RPC_URL || "https://api.mainnet-beta.solana.com";
 
 type Pair = {
@@ -25,9 +24,11 @@ async function withTimeout<T>(p: Promise<T>, ms: number): Promise<T | null> {
   ]).catch(() => null);
 }
 
-async function fetchPair(): Promise<Pair | null> {
+async function fetchPair(contract: string): Promise<Pair | null> {
   const res = await withTimeout(
-    fetch(DEXSCREENER, { cache: "no-store" }),
+    fetch(`https://api.dexscreener.com/latest/dex/tokens/${contract}`, {
+      cache: "no-store",
+    }),
     6000
   );
   if (!res || !res.ok) return null;
@@ -39,7 +40,7 @@ async function fetchPair(): Promise<Pair | null> {
   );
 }
 
-async function fetchSupply(): Promise<number | null> {
+async function fetchSupply(contract: string): Promise<number | null> {
   const res = await withTimeout(
     fetch(RPC, {
       method: "POST",
@@ -49,7 +50,7 @@ async function fetchSupply(): Promise<number | null> {
         jsonrpc: "2.0",
         id: 1,
         method: "getTokenSupply",
-        params: [SITE.contract],
+        params: [contract],
       }),
     }),
     6000
@@ -63,14 +64,26 @@ async function fetchSupply(): Promise<number | null> {
 }
 
 export async function GET() {
+  const contract = SITE.contract;
+
+  // Pre-launch: nothing is deployed, so there is nothing to look up. Answer
+  // without touching DexScreener or the RPC — and without naming an address.
+  if (contract === null) {
+    return Response.json(
+      { launched: false, contract: null },
+      { headers: { "Cache-Control": "public, s-maxage=60" } }
+    );
+  }
+
   const [pair, supply] = await Promise.all([
-    fetchPair().catch(() => null),
-    fetchSupply().catch(() => null),
+    fetchPair(contract).catch(() => null),
+    fetchSupply(contract).catch(() => null),
   ]);
 
   return Response.json(
     {
-      contract: SITE.contract,
+      launched: true,
+      contract,
       priceUsd: pair?.priceUsd ? Number(pair.priceUsd) : null,
       change24h: pair?.priceChange?.h24 ?? null,
       liquidityUsd: pair?.liquidity?.usd ?? null,

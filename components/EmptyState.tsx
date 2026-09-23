@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { SITE, SUGGESTIONS } from "@/lib/config";
+import { IS_LAUNCHED, SITE, SUGGESTIONS } from "@/lib/config";
 
 export function EmptyState({
   onPick,
@@ -27,9 +27,23 @@ export function EmptyState({
         What can I fetch for you?
       </h1>
       <p className="mt-2 max-w-md text-sm text-[var(--text-muted)]">
-        {SITE.name} is the Shiba Inu powered AI on Solana — paired to{" "}
-        <span className="font-medium text-[var(--text)]">OpenAI stock</span> on
-        stonkfun.
+        {IS_LAUNCHED ? (
+          <>
+            {SITE.name} is the Shiba Inu powered AI on Solana — paired to{" "}
+            <span className="font-medium text-[var(--text)]">OpenAI stock</span>{" "}
+            on stonkfun.
+          </>
+        ) : (
+          <>
+            {SITE.name} is the Shiba Inu powered AI launching on Solana, paired
+            to{" "}
+            <span className="font-medium text-[var(--text)]">OpenAI stock</span>.
+            No contract address yet —{" "}
+            <span className="font-medium text-[var(--text)]">
+              anyone showing you one is lying.
+            </span>
+          </>
+        )}
       </p>
 
       <div className="mt-7 grid w-full max-w-2xl grid-cols-1 gap-2 sm:grid-cols-2">

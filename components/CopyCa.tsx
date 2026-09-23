@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { SITE } from "@/lib/config";
+import { COMING_SOON, SITE } from "@/lib/config";
 import { shortCa } from "@/lib/format";
 import { CheckIcon, CopyIcon } from "./Icons";
 
@@ -13,6 +13,7 @@ export function CopyCa({
   full?: boolean;
 }) {
   const [copied, setCopied] = useState(false);
+  const contract = SITE.contract;
 
   useEffect(() => {
     if (!copied) return;
@@ -20,9 +21,27 @@ export function CopyCa({
     return () => clearTimeout(id);
   }, [copied]);
 
+  // Pre-launch there is nothing to copy — a static label, not a dead button.
+  if (contract === null) {
+    return (
+      <span
+        title="The contract address is announced at launch"
+        className={[
+          "inline-flex shrink-0 items-center gap-1.5 rounded-full border border-dashed border-[var(--border-strong)] text-[var(--text-muted)]",
+          compact ? "px-2.5 py-1 text-[11px]" : "px-3 py-1.5 text-xs",
+        ].join(" ")}
+      >
+        <span className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--text-faint)]">
+          CA
+        </span>
+        <span className="font-medium">{COMING_SOON}</span>
+      </span>
+    );
+  }
+
   const copy = async () => {
     try {
-      await navigator.clipboard.writeText(SITE.contract);
+      await navigator.clipboard.writeText(contract);
       setCopied(true);
     } catch {
       setCopied(false);
@@ -32,7 +51,7 @@ export function CopyCa({
   return (
     <button
       onClick={copy}
-      title={SITE.contract}
+      title={contract}
       aria-label="Copy contract address"
       className={[
         "group inline-flex shrink-0 items-center gap-1.5 rounded-full border border-[var(--border)] font-mono transition",
@@ -50,7 +69,7 @@ export function CopyCa({
           CA
         </span>
       )}
-      <span>{copied ? "Copied" : full ? SITE.contract : shortCa(SITE.contract, compact ? 4 : 6)}</span>
+      <span>{copied ? "Copied" : full ? contract : shortCa(contract, compact ? 4 : 6)}</span>
       {copied ? (
         <CheckIcon className="size-3.5" />
       ) : (

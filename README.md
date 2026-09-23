@@ -2,15 +2,19 @@
 
 > The good boy of artificial intelligence.
 
-A ChatGPT-style web app for **$OPENINU**, a Shiba Inu themed memecoin on **Solana**, paired to **OpenAI stock** on [stonkfun.xyz](https://www.stonkfun.xyz/token/CpcgnprGb6jMV5SY8oRuyALRByr9rNkYsdw8AVMCvdoN).
+A ChatGPT-style web app for **$OPENINU**, a Shiba Inu themed memecoin on **Solana**, paired to **OpenAI stock** on stonkfun.xyz.
 
 The dog is not fan art. OpenAI generated him and posted him to their own Instagram on **3 October 2022**, captioned *"shiba inu portrait, 8k, rendering"* — [the post is still up](https://www.instagram.com/p/CjQeCdTL51i/). They made him, posted him, and moved on. $OPENINU is the part where someone came back for him.
 
-**Contract address (Solana)**
+## 🚧 Not launched yet
 
-```
-CpcgnprGb6jMV5SY8oRuyALRByr9rNkYsdw8AVMCvdoN
-```
+**There is no contract address.** It is deliberately not in this repo.
+
+The site runs in pre-launch mode until `NEXT_PUBLIC_TOKEN_CONTRACT` is set, which means the CA, the stonkfun/DexScreener/Solscan links and the live stats bar all read **"Coming soon"**, and the assistant refuses to produce an address at all — it cannot leak what it does not have.
+
+> Anyone circulating a $OPENINU contract address right now is not us. The real one is announced on [X](https://x.com/openinu_) and appears on the site at the same moment.
+
+**To go live:** set `NEXT_PUBLIC_TOKEN_CONTRACT` on Vercel and redeploy. Every address, link and live number comes back on together — no code changes.
 
 ---
 
